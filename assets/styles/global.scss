@@ -1,5 +1,18 @@
 @import 'helveticaneu.scss';
+@import 'mixins/colors';
 
 body {
     font-family: 'HelveticaNeue';
+}
+
+.navbar.is-primary {
+    background-color: $bg-primary;
+}
+
+.bg-faded {
+    background-image: -webkit-gradient(linear,left top,right top,color-stop(5%,#333),color-stop(95%,#181818));
+    background-image: -webkit-linear-gradient(to right,#333 5%,#181818 95%);
+    background-image: -moz- oldlinear-gradient(to right,#333 5%,#181818 95%);
+    background-image: -o-linear-gradient(to right,#333 5%,#181818 95%);
+    background-image: linear-gradient(to right,#333 5%,#181818 95%);
 }
