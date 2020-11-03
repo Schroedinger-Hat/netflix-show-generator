@@ -1,16 +1,17 @@
 <template>
   <section class="section">
-    <PosterCanvas />
+    <client-only placeholder="Loading...">
+      <PosterCanvas />
+    </client-only>
   </section>
 </template>
 <script>
-import PosterCanvas from '~/components/PosterCanvas'
 
 export default {
   name: 'HomePage',
 
   components: {
-    PosterCanvas
+    PosterCanvas: () => { if (process.client) { return import('~/components/PosterCanvas') } }
   }
 }
 </script>
