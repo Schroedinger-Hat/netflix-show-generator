@@ -6,6 +6,9 @@
       @dragstart="handleDragstart"
       @dragend="handleDragend"
     >
+      <v-layer>
+        <v-text key="head-title" :config="{text: '<h1>Titolo</h1>'}" />
+      </v-layer>
       <v-layer ref="layer">
         <v-star
           v-for="item in list"
@@ -50,19 +53,32 @@ export default {
     }
   },
   mounted () {
-    this.width = window.innerWidth
-    this.height = window.innerHeight
+    this.configKonva.width = window.innerWidth
+    this.configKonva.height = window.innerHeight
+
     for (let n = 0; n < 30; n++) {
       this.list.push({
         id: Math.round(Math.random() * 10000).toString(),
-        x: Math.random() * this.width,
-        y: Math.random() * this.height,
+        x: Math.random() * this.configKonva.width,
+        y: Math.random() * this.configKonva.height,
         rotation: Math.random() * 180,
         scale: Math.random()
       })
     }
   },
   methods: {
+    downloadURI (uri, name) {
+      const link = document.createElement('a')
+      link.download = name
+      link.href = uri
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    },
+    saveToPng () {
+      const dataURL = this.$refs.stage.getStage().toDataURL()
+      this.downloadURI(dataURL, 'stage.png')
+    },
     handleDragstart (e) {
       // save drag element:
       this.dragItemId = e.target.id()
