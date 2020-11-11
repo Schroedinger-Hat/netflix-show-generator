@@ -7,17 +7,44 @@
       @dragend="handleDragend"
     >
       <v-layer>
+        <v-image
+          key="image"
+          :config="{
+            image: image,
+          }"
+        />
+        <v-rect
+          key="bg"
+          :config="{
+            x: 0,
+            y: 0,
+            width: configKonva.width,
+            height: configKonva.height,
+            fillLinearGradientStartPoint: {
+              x: 0,
+              y: 0
+            },
+            fillLinearGradientEndPoint: {
+              x: configKonva.width,
+              y: configKonva.height
+            },
+            fillLinearGradientColorStops: [0,'#333333',0.95, '#18181800']
+          }"
+        />
+      </v-layer>
+      <v-layer ref="text">
         <v-text
           key="head-title"
           :config="{
             id: 'head-title',
             draggable: true,
-            x: 20,
-            y: 180,
+            x: 65,
+            y: 295,
             text: 'Il re',
             fontSize: 24,
-            fontFamily: 'HelveticaNeue',
+            fontFamily: 'Helvetica Neue ,Helvetica,Arial,sans-serif',
             fill: '#fff',
+            fontStyle: 700,
           }"
         />
         <v-text
@@ -25,12 +52,43 @@
           :config="{
             id: 'subtitle',
             draggable: true,
-            x: 20,
-            y: 230,
-            text: '2019 | VM14 | 2h 20min | Drammi',
+            x: 65,
+            y: 340,
+            text: '2019   |   VM14   |   2h 20min  |   Drammi',
             fontSize: 14,
-            fontFamily: 'HelveticaNeue',
+            fontFamily: 'Helvetica Neue ,Helvetica,Arial,sans-serif',
             fill: '#a3a3a3',
+          }"
+        />
+        <v-text
+          key="description"
+          :config="{
+            id: 'description',
+            draggable: true,
+            x: 65,
+            y: 375,
+            width: 500,
+            lineHeight: 1.4,
+            text: 'Il ribelle principe Hal sveste i panni di gaudente per quelli di re guerriero, affrontando insidie dentro e fuori le mura del castello nella lotta per l\'Inghilterra.',
+            fontSize: 16,
+            fontStyle: 400,
+            fontFamily: 'Helvetica Neue ,Helvetica,Arial,sans-serif',
+            fill: '#fff'
+          }"
+        />
+        <v-text
+          key="actors"
+          :config="{
+            id: 'actor',
+            text: 'Con: Timothée Chalamet, Joel Edgerton, Robert Pattinson',
+            x: 65,
+            y: 470,
+            width: 500,
+            draggable: true,
+            fill: '#fff',
+            fontStyle: 400,
+            fontSize: 16,
+            fontFamily: 'Helvetica Neue ,Helvetica,Arial,sans-serif',
           }"
         />
       </v-layer>
@@ -70,6 +128,7 @@ export default {
   data () {
     return {
       list: [],
+      image: null,
       dragItemId: null,
       configKonva: {
         width,
@@ -80,6 +139,15 @@ export default {
   mounted () {
     this.configKonva.width = window.innerWidth
     this.configKonva.height = window.innerHeight
+
+    const image = new Image()
+    image.src = 'https://occ-0-2940-2582.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABZJ7wQ1ajqcgLX7UknDiRfT2dNa1gDal7fQGXJQLEM3gmy0IftW5N9g1Tox4vsNSOcnYnJ-fbw0-ibJYaLJjI4sNg9gs.jpg?r=5f3'
+    image.width = this.configKonva.width
+    image.height = this.configKonva.height
+
+    image.onload = () => {
+      this.image = image
+    }
 
     for (let n = 0; n < 5; n++) {
       this.list.push({

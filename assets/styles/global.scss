@@ -14,6 +14,10 @@ body {
     background-color: $bg-primary;
 }
 
+section {
+    padding: 0 !important;
+}
+
 .bg-faded {
     background-image: -webkit-gradient(linear,left top,right top,color-stop(5%,#333),color-stop(95%,$bg-neutral));
     background-image: -webkit-linear-gradient(to right,#333 5%,$bg-neutral 95%);
