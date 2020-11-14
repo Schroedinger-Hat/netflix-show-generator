@@ -28,11 +28,40 @@
               x: configKonva.width,
               y: configKonva.height
             },
-            fillLinearGradientColorStops: [0,'#333333',0.95, '#18181800']
+            fillLinearGradientColorStops: [0,'#171717', 0.15, '#171717fc', 0.2, '#171717f3', 0.25, '#171717e4', 0.30, '#171717d2', 0.95, '#17171700']
+            // fillLinearGradientColorStops: [0, '#171717', 0.016, '#171717fc', 0.03, '#171717f3', 0.045, '#171717e4', 0.058, '#171717d2', 0.07, '#171717bd', 0.08, '#171717a5', 0.09, '#1717178c', 0.1, '#17171773', 0.11, '#1717175a', 0.12, '#17171742', 0.14, '#1717172d', 0.15, '#1717171b', 0.17, '#1717170c', 0.18, '#17171703', 0.2, '#17171700'],
           }"
         />
       </v-layer>
       <v-layer ref="text">
+        <v-text
+          key="netflix-original"
+          :config="{
+            id: 'netflix-original',
+            draggable: true,
+            x: 65,
+            y: 235,
+            text: 'NETFLIX',
+            fontSize: 36,
+            fontFamily: 'Helvetica Neue ,Helvetica,Arial,sans-serif',
+            fill: '#fff',
+            fontStyle: 700,
+          }"
+        />
+        <v-text
+          key="netflix-original"
+          :config="{
+            id: 'netflix-original',
+            draggable: true,
+            x: 230,
+            y: 235,
+            text: 'ORIGINALS',
+            fontSize: 36,
+            fontFamily: 'Helvetica Neue ,Helvetica,Arial,sans-serif',
+            fill: '#fff',
+            fontStyle: 400,
+          }"
+        />
         <v-text
           key="head-title"
           :config="{
@@ -142,6 +171,7 @@ export default {
 
     const image = new Image()
     image.src = 'https://occ-0-2940-2582.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABZJ7wQ1ajqcgLX7UknDiRfT2dNa1gDal7fQGXJQLEM3gmy0IftW5N9g1Tox4vsNSOcnYnJ-fbw0-ibJYaLJjI4sNg9gs.jpg?r=5f3'
+    image.src = 'https://occ-0-2940-2582.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABUpJhujhQAvjWyEkzhf6Z3ChDyZHZChxm8Q_3C6818BjZB3TC6hZ6rW_EpKl4NSoA6QQF187BYhiwzTwd7lY79ERH6o6.jpg?r=a73'
     image.width = this.configKonva.width
     image.height = this.configKonva.height
 
