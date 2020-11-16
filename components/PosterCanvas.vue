@@ -7,6 +7,17 @@
       @dragend="handleDragend"
     >
       <v-layer>
+        <v-rect
+          key="neutral"
+          :config="{
+            id: 'neutral',
+            x: 0,
+            y: 0,
+            fill: '#171717',
+            width: configKonva.width,
+            height: configKonva.height
+          }"
+        />
         <v-image
           key="image"
           :config="{
