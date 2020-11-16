@@ -10,12 +10,17 @@
         <v-image
           key="image"
           :config="{
-            image: image,
+            id: 'bg-image',
+            draggable: true,
+            image: bgImage,
+            x: imageConfig.x,
+            y: imageConfig.y
           }"
         />
         <v-rect
           key="bg"
           :config="{
+            draggable: true,
             x: 0,
             y: 0,
             width: configKonva.width,
@@ -25,19 +30,19 @@
               y: 0
             },
             fillLinearGradientEndPoint: {
-              x: configKonva.width,
-              y: configKonva.height
+              x: configKonva.width * 90 / 100,
+              y: 0
             },
-            fillLinearGradientColorStops: [0,'#171717', 0.15, '#171717fc', 0.2, '#171717f3', 0.25, '#171717e4', 0.30, '#171717d2', 0.95, '#17171700']
-            // fillLinearGradientColorStops: [0, '#171717', 0.016, '#171717fc', 0.03, '#171717f3', 0.045, '#171717e4', 0.058, '#171717d2', 0.07, '#171717bd', 0.08, '#171717a5', 0.09, '#1717178c', 0.1, '#17171773', 0.11, '#1717175a', 0.12, '#17171742', 0.14, '#1717172d', 0.15, '#1717171b', 0.17, '#1717170c', 0.18, '#17171703', 0.2, '#17171700'],
+            //fillLinearGradientColorStops: [0,'#171717', 0.15, '#171717fc', 0.2, '#171717f3', 0.25, '#171717e4', 0.30, '#171717d2', 0.95, '#17171700']
+            fillLinearGradientColorStops: [0, '#171717', 0.2, '#171717fa', 0.25, '#171717f7', 0.35, '#171717f2', 0.4, '#171717f0', 0.45, '#171717eb', 0.5, '#171717e6', 0.55, '#171717de', 0.6, '#171717d1', 0.65, '#171717bf', 0.7, '#171717a1', 0.75, '#17171773', 0.8, '#17171745', 0.85, '#17171726', 0.9, '#17171714', 0.95, '#17171708', 1, '#17171700']
           }"
         />
       </v-layer>
       <v-layer ref="text">
         <v-text
-          key="netflix-original"
+          key="netflix"
           :config="{
-            id: 'netflix-original',
+            id: 'netflix',
             draggable: true,
             x: 65,
             y: 235,
@@ -121,30 +126,6 @@
           }"
         />
       </v-layer>
-      <v-layer ref="layer">
-        <v-star
-          v-for="item in list"
-          :key="item.id"
-          :config="{
-            x: item.x,
-            y: item.y,
-            rotation: item.rotation,
-            id: item.id,
-            numPoints: 5,
-            innerRadius: 30,
-            outerRadius: 50, fill: '#89b717',
-            opacity: 0.8,
-            draggable: true,
-            scaleX: dragItemId === item.id ? item.scale * 1.2 : item.scale,
-            scaleY: dragItemId === item.id ? item.scale * 1.2 : item.scale,
-            shadowColor: 'black',
-            shadowBlur: 10,
-            shadowOffsetX: dragItemId === item.id ? 15 : 5,
-            shadowOffsetY: dragItemId === item.id ? 15 : 5,
-            shadowOpacity: 0.6
-          }"
-        />
-      </v-layer>
     </v-stage>
   </div>
 </template>
@@ -157,8 +138,11 @@ export default {
   data () {
     return {
       list: [],
-      image: null,
+      bgImage: null,
       dragItemId: null,
+      imageConfig: {
+        x: 0
+      },
       configKonva: {
         width,
         height
@@ -170,14 +154,27 @@ export default {
     this.configKonva.height = window.innerHeight
 
     const image = new Image()
-    image.src = 'https://occ-0-2940-2582.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABZJ7wQ1ajqcgLX7UknDiRfT2dNa1gDal7fQGXJQLEM3gmy0IftW5N9g1Tox4vsNSOcnYnJ-fbw0-ibJYaLJjI4sNg9gs.jpg?r=5f3'
-    image.src = 'https://occ-0-2940-2582.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABUpJhujhQAvjWyEkzhf6Z3ChDyZHZChxm8Q_3C6818BjZB3TC6hZ6rW_EpKl4NSoA6QQF187BYhiwzTwd7lY79ERH6o6.jpg?r=a73'
-    image.width = this.configKonva.width
-    image.height = this.configKonva.height
+    // image.src = 'https://occ-0-2940-2582.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABZJ7wQ1ajqcgLX7UknDiRfT2dNa1gDal7fQGXJQLEM3gmy0IftW5N9g1Tox4vsNSOcnYnJ-fbw0-ibJYaLJjI4sNg9gs.jpg?r=5f3'
+    image.src = require('~/assets/images/casa-de-papel.jpg')
 
     image.onload = () => {
-      this.image = image
+      const ratio = Math.min(this.configKonva.width / image.width, this.configKonva.height / image.height)
+
+      image.width = image.width * ratio
+      image.height = image.height * ratio
+      this.imageConfig.x = this.configKonva.width - image.width
+      // this.imageConfig.y = this.configKonva.height - image.height
+
+      this.bgImage = image
+      image.remove()
     }
+
+    this.$refs.stage.getStage().container().addEventListener('dragenter', this.eventPreventDefault)
+    this.$refs.stage.getStage().container().addEventListener('dragover', this.eventPreventDefault)
+    this.$refs.stage.getStage().container().addEventListener('dragleave', this.eventPreventDefault)
+    this.$refs.stage.getStage().container().addEventListener('drop', this.eventPreventDefault)
+
+    this.$refs.stage.getStage().container().addEventListener('drop', this.handleDroparea)
 
     for (let n = 0; n < 5; n++) {
       this.list.push({
@@ -190,6 +187,44 @@ export default {
     }
   },
   methods: {
+    eventPreventDefault (e) {
+      e.preventDefault()
+      e.stopPropagation()
+    },
+    handleDroparea (e) {
+      e.preventDefault()
+      const files = []
+      if (e.dataTransfer.items) {
+        for (let i = 0; i < e.dataTransfer.items.length; i++) {
+          // If dropped items aren't files, reject them
+          if (e.dataTransfer.items[i].kind === 'file') {
+            files.push(e.dataTransfer.items[i].getAsFile())
+          }
+        }
+      } else {
+        // Use DataTransfer interface to access the file(s)
+        for (let i = 0; i < e.dataTransfer.files.length; i++) {
+          files.push(e.dataTransfer.files[i])
+        }
+      }
+      console.log(files[0])
+      const imageURL = URL.createObjectURL(files[0])
+      console.log(imageURL)
+      const image = new Image()
+      image.src = imageURL
+
+      image.onload = () => {
+        const ratio = Math.min(this.configKonva.width / image.width, this.configKonva.height / image.height)
+
+        image.width = image.width * ratio
+        image.height = image.height * ratio
+
+        this.imageConfig.x = this.configKonva.width - image.width
+        this.imageConfig.y = this.configKonva.height - image.height
+        this.bgImage = image
+      }
+      this.saveToPng()
+    },
     downloadURI (uri, name) {
       const link = document.createElement('a')
       link.download = name
@@ -208,12 +243,6 @@ export default {
       if (this.dragItemId.match(/\d/) !== -1) {
         return false
       }
-
-      // move current element to the top:
-      const item = this.list.find(i => i.id === this.dragItemId)
-      const index = this.list.indexOf(item)
-      this.list.splice(index, 1)
-      this.list.push(item)
     },
     handleDragend (e) {
       this.dragItemId = null
