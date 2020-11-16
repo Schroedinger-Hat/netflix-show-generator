@@ -149,6 +149,7 @@ export default {
   data () {
     return {
       list: [],
+      images: [],
       bgImage: null,
       dragItemId: null,
       imageConfig: {
@@ -177,7 +178,6 @@ export default {
       // this.imageConfig.y = this.configKonva.height - image.height
 
       this.bgImage = image
-      image.remove()
     }
 
     this.$refs.stage.getStage().container().addEventListener('dragenter', this.eventPreventDefault)
@@ -218,9 +218,8 @@ export default {
           files.push(e.dataTransfer.files[i])
         }
       }
-      console.log(files[0])
+
       const imageURL = URL.createObjectURL(files[0])
-      console.log(imageURL)
       const image = new Image()
       image.src = imageURL
 
@@ -233,8 +232,8 @@ export default {
         this.imageConfig.x = this.configKonva.width - image.width
         this.imageConfig.y = this.configKonva.height - image.height
         this.bgImage = image
+        this.saveToPng()
       }
-      this.saveToPng()
     },
     downloadURI (uri, name) {
       const link = document.createElement('a')
