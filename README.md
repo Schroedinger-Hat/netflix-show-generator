@@ -1,5 +1,8 @@
 # netflix-gen
 
+![Demo](https://media.giphy.com/media/wAym7dVHDXZBcAPoT7/giphy.gif)
+
+
 ## Build Setup
 
 ```bash
