@@ -1,6 +1,6 @@
 # netflix-gen
 
-![Demo](https://media.giphy.com/media/wAym7dVHDXZBcAPoT7/giphy.gif)
+![Demo](https://media.giphy.com/media/0oLSafZLQpno4bUXAP/giphy.gif)
 
 
 ## Build Setup
@@ -21,3 +21,11 @@ $ npm run generate
 ```
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+
+## Credits
+
+[thejoin](https://github.com/thejoin95)
+
+## License
+
+MIT
