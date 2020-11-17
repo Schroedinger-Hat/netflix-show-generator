@@ -5,10 +5,14 @@
       :config="configKonva"
       @dragstart="handleDragstart"
       @dragend="handleDragend"
+      @mousedown="handleStageMouseDown"
+      @touchstart="handleStageMouseDown"
     >
       <v-layer>
         <v-rect
           key="neutral"
+          ref="neutral"
+          name="neutral"
           :config="{
             id: 'neutral',
             x: 0,
@@ -19,7 +23,9 @@
           }"
         />
         <v-image
-          key="image"
+          key="bg-image"
+          ref="bg-image"
+          name="bg-image"
           :config="{
             id: 'bg-image',
             draggable: true,
@@ -30,7 +36,10 @@
         />
         <v-rect
           key="bg"
+          ref="bg"
+          name="bg"
           :config="{
+            id: 'bg',
             draggable: true,
             x: 0,
             y: 0,
@@ -48,10 +57,13 @@
             fillLinearGradientColorStops: [0, '#171717', 0.2, '#171717fa', 0.25, '#171717f7', 0.35, '#171717f2', 0.4, '#171717f0', 0.45, '#171717eb', 0.5, '#171717e6', 0.55, '#171717de', 0.6, '#171717d1', 0.65, '#171717bf', 0.7, '#171717a1', 0.75, '#17171773', 0.8, '#17171745', 0.85, '#17171726', 0.9, '#17171714', 0.95, '#17171708', 1, '#17171700']
           }"
         />
+        <v-transformer ref="transformer-l1" />
       </v-layer>
       <v-layer ref="text">
         <v-text
           key="netflix"
+          ref="netflix"
+          name="netflix"
           :config="{
             id: 'netflix',
             draggable: true,
@@ -63,9 +75,12 @@
             fill: '#fff',
             fontStyle: 700,
           }"
+          @dblclick="editableText"
         />
         <v-text
           key="netflix-original"
+          ref="netflix-original"
+          name="netflix-original"
           :config="{
             id: 'netflix-original',
             draggable: true,
@@ -77,9 +92,13 @@
             fill: '#fff',
             fontStyle: 400,
           }"
+          ,
+          @dblclick="editableText"
         />
         <v-text
           key="head-title"
+          ref="head-title"
+          name="head-title"
           :config="{
             id: 'head-title',
             draggable: true,
@@ -91,9 +110,13 @@
             fill: '#fff',
             fontStyle: 700,
           }"
+          ,
+          @dblclick="editableText"
         />
         <v-text
           key="subtitle"
+          ref="subtitle"
+          name="subtitle"
           :config="{
             id: 'subtitle',
             draggable: true,
@@ -104,9 +127,13 @@
             fontFamily: 'Helvetica Neue ,Helvetica,Arial,sans-serif',
             fill: '#a3a3a3',
           }"
+          ,
+          @dblclick="editableText"
         />
         <v-text
           key="description"
+          ref="description"
+          name="description"
           :config="{
             id: 'description',
             draggable: true,
@@ -120,12 +147,16 @@
             fontFamily: 'Helvetica Neue ,Helvetica,Arial,sans-serif',
             fill: '#fff'
           }"
+          ,@transformend="handleTransformEnd"
+          @dblclick="editableText"
         />
         <v-text
+          ref="actors"
           key="actors"
+          name="actors"
           :config="{
             id: 'actor',
-            text: 'Con: Timothée Chalamet, Joel Edgerton, Robert Pattinson',
+            text: 'Starring: Timothée Chalamet, Joel Edgerton, Robert Pattinson',
             x: 65,
             y: 470,
             width: 500,
@@ -135,7 +166,10 @@
             fontSize: 16,
             fontFamily: 'Helvetica Neue ,Helvetica,Arial,sans-serif',
           }"
+          ,
+          @dblclick="editableText"
         />
+        <v-transformer ref="transformer" />
       </v-layer>
     </v-stage>
   </div>
@@ -166,8 +200,7 @@ export default {
     this.configKonva.height = window.innerHeight
 
     const image = new Image()
-    // image.src = 'https://occ-0-2940-2582.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABZJ7wQ1ajqcgLX7UknDiRfT2dNa1gDal7fQGXJQLEM3gmy0IftW5N9g1Tox4vsNSOcnYnJ-fbw0-ibJYaLJjI4sNg9gs.jpg?r=5f3'
-    image.src = require('~/assets/images/casa-de-papel.jpg')
+    image.src = require('~/assets/images/king.jpg')
 
     image.onload = () => {
       const ratio = Math.min(this.configKonva.width / image.width, this.configKonva.height / image.height)
@@ -187,15 +220,7 @@ export default {
 
     this.$refs.stage.getStage().container().addEventListener('drop', this.handleDroparea)
 
-    for (let n = 0; n < 5; n++) {
-      this.list.push({
-        id: Math.round(Math.random() * 10000).toString(),
-        x: Math.random() * this.configKonva.width,
-        y: Math.random() * this.configKonva.height,
-        rotation: Math.random() * 180,
-        scale: Math.random()
-      })
-    }
+    document.getElementById('save-btn').addEventListener('click', this.saveToPng)
   },
   methods: {
     eventPreventDefault (e) {
@@ -232,7 +257,6 @@ export default {
         this.imageConfig.x = this.configKonva.width - image.width
         this.imageConfig.y = this.configKonva.height - image.height
         this.bgImage = image
-        this.saveToPng()
       }
     },
     downloadURI (uri, name) {
@@ -244,7 +268,9 @@ export default {
       document.body.removeChild(link)
     },
     saveToPng () {
-      const dataURL = this.$refs.stage.getStage().toDataURL()
+      const dataURL = this.$refs.stage.getStage().toDataURL({
+        pixelRatio: 2
+      })
       this.downloadURI(dataURL, 'stage.png')
     },
     handleDragstart (e) {
@@ -256,6 +282,191 @@ export default {
     },
     handleDragend (e) {
       this.dragItemId = null
+    },
+    handleTransformEnd (e) {
+      // shape is transformed, let us save new attrs back to the node
+      // find element in our state
+
+      const rect = this.$refs[this.selectedShapeName]
+      // update the state
+      rect.x = e.target.x()
+      rect.y = e.target.y()
+      rect.rotation = e.target.rotation()
+      rect.scaleX = e.target.scaleX()
+      rect.scaleY = e.target.scaleY()
+
+      // change fill
+      // eslint-disable-next-line no-undef
+      rect.fill = Konva.Util.getRandomColor()
+    },
+    handleStageMouseDown (e) {
+      // clicked on stage - clear selection
+      if (e.target === e.target.getStage()) {
+        this.selectedShapeName = ''
+        this.updateTransformer()
+        return
+      }
+
+      // clicked on transformer - do nothing
+      const clickedOnTransformer =
+        e.target.getParent().className === 'Transformer'
+      if (clickedOnTransformer) {
+        return
+      }
+
+      // find clicked rect by its name
+      const name = e.target.id()
+      const rect = this.$refs[name]
+      if (rect) {
+        this.selectedShapeName = name
+      } else {
+        this.selectedShapeName = ''
+      }
+      this.updateTransformer()
+    },
+    updateTransformer () {
+      // here we need to manually attach or detach Transformer node
+      const transformerNode = this.$refs.transformer.getNode()
+      const stage = transformerNode.getStage()
+      const { selectedShapeName } = this
+
+      const selectedNode = stage.findOne('.' + selectedShapeName)
+      // do nothing if selected node is already attached
+      if (selectedNode === transformerNode.node()) {
+        return
+      }
+
+      if (selectedNode) {
+        // attach to another node
+        transformerNode.nodes([selectedNode])
+      } else {
+        // remove transformer
+        transformerNode.nodes([])
+      }
+      transformerNode.getLayer().batchDraw()
+    },
+    editableText (e) {
+      const textNode = e.target
+      textNode.hide()
+      const context = this
+      context.$refs.transformer.getNode().hide()
+      textNode.getLayer().draw()
+
+      const textPosition = textNode.absolutePosition()
+
+      const stageBox = e.target.getStage().container().getBoundingClientRect()
+
+      const areaPosition = {
+        x: stageBox.left + textPosition.x,
+        y: stageBox.top + textPosition.y
+      }
+
+      const textarea = document.createElement('textarea')
+      document.body.appendChild(textarea)
+
+      textarea.value = textNode.text()
+      textarea.style.position = 'absolute'
+      textarea.style.top = areaPosition.y + 'px'
+      textarea.style.left = areaPosition.x + 'px'
+      textarea.style.width = textNode.width() - textNode.padding() * 2 + 'px'
+      textarea.style.height =
+            textNode.height() - textNode.padding() * 2 + 5 + 'px'
+      textarea.style.fontSize = textNode.fontSize() + 'px'
+      textarea.style.border = 'none'
+      textarea.style.padding = '0px'
+      textarea.style.margin = '0px'
+      textarea.style.overflow = 'hidden'
+      textarea.style.background = 'none'
+      textarea.style.outline = 'none'
+      textarea.style.resize = 'none'
+      textarea.style.lineHeight = textNode.lineHeight()
+      textarea.style.fontFamily = textNode.fontFamily()
+      textarea.style.transformOrigin = 'left top'
+      textarea.style.textAlign = textNode.align()
+      textarea.style.color = textNode.fill()
+      const rotation = textNode.rotation()
+      let transform = ''
+      if (rotation) {
+        transform += 'rotateZ(' + rotation + 'deg)'
+      }
+
+      let px = 0
+      const isFirefox =
+            navigator.userAgent.toLowerCase().includes('firefox')
+      if (isFirefox) {
+        px += 2 + Math.round(textNode.fontSize() / 20)
+      }
+      transform += 'translateY(-' + px + 'px)'
+
+      textarea.style.transform = transform
+
+      textarea.style.height = 'auto'
+      textarea.style.height = textarea.scrollHeight + 3 + 'px'
+
+      textarea.focus()
+
+      function removeTextarea () {
+        textarea.parentNode.removeChild(textarea)
+        window.removeEventListener('click', handleOutsideClick)
+        textNode.show()
+        context.$refs.transformer.getNode().show()
+        context.$refs.transformer.getNode().forceUpdate()
+        textNode.getLayer().draw()
+      }
+
+      function setTextareaWidth (newWidth) {
+        if (!newWidth) {
+          // set width for placeholder
+          newWidth = textNode.placeholder.length * textNode.fontSize()
+        }
+        // some extra fixes on different browsers
+        const isSafari = /^((?!chrome|android).)*safari/i.test(
+          navigator.userAgent
+        )
+        const isFirefox =
+              navigator.userAgent.toLowerCase().includes('firefox')
+        if (isSafari || isFirefox) {
+          newWidth = Math.ceil(newWidth)
+        }
+
+        const isEdge =
+              document.documentMode || /Edge/.test(navigator.userAgent)
+        if (isEdge) {
+          newWidth += 1
+        }
+        textarea.style.width = newWidth + 'px'
+      }
+
+      textarea.addEventListener('keydown', function (e) {
+        // hide on enter
+        // but don't hide on shift + enter
+        if (e.keyCode === 13 && !e.shiftKey) {
+          textNode.text(textarea.value)
+          removeTextarea()
+        }
+        // on esc do not set value back to node
+        if (e.keyCode === 27) {
+          removeTextarea()
+        }
+      })
+
+      textarea.addEventListener('keydown', function (e) {
+        const scale = textNode.getAbsoluteScale().x
+        setTextareaWidth(textNode.width() * scale)
+        textarea.style.height = 'auto'
+        textarea.style.height =
+              textarea.scrollHeight + textNode.fontSize() + 'px'
+      })
+
+      function handleOutsideClick (e) {
+        if (e.target !== textarea) {
+          textNode.text(textarea.value)
+          removeTextarea()
+        }
+      }
+      setTimeout(() => {
+        window.addEventListener('click', handleOutsideClick)
+      })
     }
   }
 }

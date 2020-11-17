@@ -23,6 +23,16 @@
           <span />
         </div>
       </div>
+      <div class="navbar-menu">
+        <div class="navbar-start" />
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a id="save-btn" class="button is-primary"><span class="icon">💾</span><strong>Download</strong></a>
+            </div>
+          </div>
+        </div>
+      </div>
     </nav>
     <nuxt />
   </div>
