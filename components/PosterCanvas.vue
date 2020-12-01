@@ -268,10 +268,13 @@ export default {
       document.body.removeChild(link)
     },
     saveToPng () {
+      this.$refs.transformer.getNode().hide()
       const dataURL = this.$refs.stage.getStage().toDataURL({
         pixelRatio: 2
       })
       this.downloadURI(dataURL, 'stage.png')
+      this.$refs.transformer.getNode().show()
+      this.$refs.transformer.getNode().forceUpdate()
     },
     handleDragstart (e) {
       // save drag element:
