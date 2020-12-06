@@ -9,9 +9,13 @@ export default {
       { hid: 'description', name: 'description', content: 'An easy to use tool for generating high definition Netflix Show Image for A/B testing or Youtube cover image' },
       { hid: 'theme-color', name: 'theme-color', content: '#000' },
       { hid: 'og:type', name: 'og:type', content: 'website' },
+      { hid: 'og:image', name: 'og:image', content: 'https://netflix.schrodinger-hat.it/icon.png' },
       { hid: 'og:title', name: 'og:title', content: 'Netflix Show Image Generator' },
       { hid: 'og:site_name', name: 'og:site_name', content: 'Netflix Show Image Generator' },
-      { hid: 'og:description', name: 'og:description', content: '#An easy to use tool for generating high definition Netflix Show Image for A/B testing or Youtube cover image' }
+      { hid: 'og:description', name: 'og:description', content: '#An easy to use tool for generating high definition Netflix Show Image for A/B testing or Youtube cover image' },
+      { hid: 'twitter:image', name: 'twitter:image', content: 'https://netflix.schrodinger-hat.it/icon.png' },
+      { hid: 'twitter:title', name: 'twitter:title', content: 'Netflix Show Image Generator' },
+      { hid: 'twitter:description', name: 'twitter:description', content: '#An easy to use tool for generating high definition Netflix Show Image for A/B testing or Youtube cover image' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
