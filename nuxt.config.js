@@ -2,11 +2,16 @@ export default {
   target: 'static',
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    title: 'netflix-gen',
+    title: 'Netflix Show Image Generator',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' }
+      { hid: 'description', name: 'description', content: 'An easy to use tool for generating high definition Netflix Show Image for A/B testing or Youtube cover image' },
+      { hid: 'theme-color', name: 'theme-color', content: '#000' },
+      { hid: 'og:type', name: 'og:type', content: 'website' },
+      { hid: 'og:title', name: 'og:title', content: 'Netflix Show Image Generator' },
+      { hid: 'og:site_name', name: 'og:site_name', content: 'Netflix Show Image Generator' },
+      { hid: 'og:description', name: 'og:description', content: '#An easy to use tool for generating high definition Netflix Show Image for A/B testing or Youtube cover image' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
@@ -20,7 +25,8 @@ export default {
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
-    { src: '~/plugins/konva.client', ssr: false }
+    { src: '~/plugins/konva.client', ssr: false },
+    { src: '~/plugins/ga', mode: 'client' }
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
