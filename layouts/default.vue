@@ -28,6 +28,7 @@
         <div class="navbar-end">
           <div class="navbar-item">
             <div class="buttons">
+              <a id="info-btn" class="button is-info" @click="showInfoModal"><span class="icon info-icon">&#x1f6c8;</span><strong>How to</strong></a>
               <a id="save-btn" class="button is-primary"><span class="icon">💾</span><strong>Download</strong></a>
             </div>
           </div>
@@ -37,3 +38,23 @@
     <nuxt />
   </div>
 </template>
+<script>
+import ModalCard from '../components/ModalCard'
+
+export default {
+  mounted () {
+    this.showInfoModal()
+  },
+  methods: {
+    showInfoModal () {
+      this.$buefy.modal.open({
+        parent: this,
+        component: ModalCard,
+        hasModalCard: true,
+        customClass: 'custom-class custom-class-2',
+        trapFocus: true
+      })
+    }
+  }
+}
+</script>

@@ -46,3 +46,33 @@ span.icon.info-icon {
         margin-right: 0px;
     }
 }
+
+/* Modals */
+
+.modal {
+    .modal-card-head,
+    .modal-card-foot {
+        border-color: $bg-neutral;
+        background: $bg-primary;
+        
+        .modal-card-title {
+            color: $text-primary-color;
+        }
+    }
+
+    .modal-card-body {
+        background: $bg-neutral;
+
+        .content {
+            padding: 1em 1.3em;
+
+            p {
+                font-weight: 300;
+            }
+
+            h3 {
+                color: $text-primary-color;
+            }
+        }
+    }
+}
