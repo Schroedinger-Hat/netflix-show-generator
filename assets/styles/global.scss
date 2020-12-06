@@ -25,3 +25,24 @@ section {
     background-image: -o-linear-gradient(to right,#333 5%,$bg-neutral 95%);
     background-image: linear-gradient(to right,#333 5%,$bg-neutral 95%);
 }
+
+/* Buttons */
+
+.button.is-info {
+    background: transparent;
+    border: 2px solid $primary;
+
+    &:hover,
+    &.is-hovered {
+        background: #e50914;
+    }
+}
+
+span.icon.info-icon {
+    font-size: 1.5em;
+    margin-right: 0;
+
+    &:first-child:not(:last-child) {
+        margin-right: 0px;
+    }
+}
