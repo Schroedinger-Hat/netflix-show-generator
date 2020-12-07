@@ -184,6 +184,7 @@ export default {
     return {
       list: [],
       images: [],
+      extraImageOn: false,
       bgImage: null,
       dragItemId: null,
       imageConfig: {
@@ -196,6 +197,7 @@ export default {
     }
   },
   mounted () {
+    const context = this
     this.configKonva.width = window.innerWidth
     this.configKonva.height = window.innerHeight
 
@@ -212,6 +214,19 @@ export default {
 
       this.bgImage = image
     }
+
+    document.getElementById('upload-btn').addEventListener('click', function (e) {
+      e.preventDefault()
+      e.stopPropagation()
+
+      context.extraImageOn = false
+      if (this.className.search('is-hovered') === -1) {
+        this.classList.add('is-hovered')
+        context.extraImageOn = true
+      } else {
+        this.classList.remove('is-hovered')
+      }
+    })
 
     this.$refs.stage.getStage().container().addEventListener('dragenter', this.eventPreventDefault)
     this.$refs.stage.getStage().container().addEventListener('dragover', this.eventPreventDefault)
@@ -248,15 +263,42 @@ export default {
       const image = new Image()
       image.src = imageURL
 
-      image.onload = () => {
-        const ratio = Math.min(this.configKonva.width / image.width, this.configKonva.height / image.height)
+      if (this.extraImageOn === true) {
+        const stage = this.$refs.stage.getStage()
+        const lastLayer = stage.getLayers().toArray()[1]
+        lastLayer.add(this.$refs.transformer.getNode())
 
-        image.width = image.width * ratio
-        image.height = image.height * ratio
+        const context = this
 
-        this.imageConfig.x = this.configKonva.width - image.width
-        this.imageConfig.y = this.configKonva.height - image.height
-        this.bgImage = image
+        // eslint-disable-next-line no-undef
+        Konva.Image.fromURL(imageURL, function (image) {
+          lastLayer.add(image)
+
+          image.position(stage.getPointerPosition())
+          image.draggable(true)
+          const uniqueImageName = new Date().getTime().toString()
+          image.id(uniqueImageName)
+          image.name(uniqueImageName)
+
+          // it is important to set new array instance (and concat method above will create it)
+          context.$refs.transformer.getNode().nodes([image])
+
+          lastLayer.draw()
+          context.$refs.transformer.getNode().show()
+          context.$refs.transformer.getNode().forceUpdate()
+        })
+      } else {
+        image.onload = () => {
+          const ratio = Math.min(this.configKonva.width / image.width, this.configKonva.height / image.height)
+
+          image.width = image.width * ratio
+          image.height = image.height * ratio
+
+          this.imageConfig.x = this.configKonva.width - image.width
+          this.imageConfig.y = this.configKonva.height - image.height
+
+          this.bgImage = image
+        }
       }
     },
     downloadURI (uri, name) {
@@ -319,12 +361,8 @@ export default {
 
       // find clicked rect by its name
       const name = e.target.id()
-      const rect = this.$refs[name]
-      if (rect) {
-        this.selectedShapeName = name
-      } else {
-        this.selectedShapeName = ''
-      }
+      // const rect = this.$refs[name]
+      this.selectedShapeName = name
       this.updateTransformer()
     },
     updateTransformer () {
@@ -332,8 +370,8 @@ export default {
       const transformerNode = this.$refs.transformer.getNode()
       const stage = transformerNode.getStage()
       const { selectedShapeName } = this
-
       const selectedNode = stage.findOne('.' + selectedShapeName)
+
       // do nothing if selected node is already attached
       if (selectedNode === transformerNode.node()) {
         return

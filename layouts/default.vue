@@ -29,6 +29,7 @@
           <div class="navbar-item">
             <div class="buttons">
               <a id="info-btn" class="button is-info" @click="showInfoModal"><span class="icon info-icon">&#x1f6c8;</span><strong>How to</strong></a>
+              <a id="upload-btn" class="button is-info"><span class="icon">➕</span><strong>Upload Extra Image</strong></a>
               <a id="save-btn" class="button is-primary"><span class="icon">💾</span><strong>Download</strong></a>
             </div>
           </div>
