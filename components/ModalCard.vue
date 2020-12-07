@@ -26,6 +26,9 @@
           In order to change the background image you can drag-n-drop any image onto the canvas and it will change the background image.
         </p>
         <p>
+          If you like to add more image into the canvas you have to click on the <code>upload extra image</code> button then drag-n-drop any image onto the canvas.
+        </p>
+        <p>
           Finally dismiss this modal by clicking on the <code>Got It</code> button. Enjoy.
         </p>
       </div>
