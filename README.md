@@ -55,4 +55,4 @@ You can find us on [our webiste](https://www.schrodinger-hat.it)
 
 # License
 
-MIT
+GPL-v3
